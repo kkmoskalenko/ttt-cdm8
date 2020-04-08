@@ -100,6 +100,37 @@
       <circ-port height="10" pin="910,480" width="10" x="85" y="45"/>
       <circ-anchor facing="east" height="6" width="6" x="47" y="47"/>
     </appear>
+    <comp lib="0" loc="(910,90)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="vout"/>
+    </comp>
+    <comp lib="0" loc="(100,280)" name="Pin">
+      <a name="width" val="2"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="hin"/>
+    </comp>
+    <comp lib="0" loc="(910,160)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="hout"/>
+    </comp>
+    <comp lib="0" loc="(910,480)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="width" val="4"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="L3"/>
+    </comp>
+    <comp lib="0" loc="(910,340)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="width" val="4"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="L1"/>
+    </comp>
     <comp lib="0" loc="(100,210)" name="Pin">
       <a name="width" val="2"/>
       <a name="tristate" val="false"/>
@@ -116,43 +147,12 @@
       <a name="tristate" val="false"/>
       <a name="label" val="L2"/>
     </comp>
-    <comp lib="0" loc="(100,280)" name="Pin">
-      <a name="width" val="2"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="hin"/>
-    </comp>
-    <comp lib="0" loc="(910,160)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="hout"/>
-    </comp>
     <comp lib="0" loc="(910,270)" name="Pin">
       <a name="facing" val="west"/>
       <a name="output" val="true"/>
       <a name="width" val="4"/>
       <a name="tristate" val="false"/>
       <a name="label" val="L0"/>
-    </comp>
-    <comp lib="0" loc="(910,340)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
-      <a name="width" val="4"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="L1"/>
-    </comp>
-    <comp lib="0" loc="(910,480)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
-      <a name="width" val="4"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="L3"/>
-    </comp>
-    <comp lib="0" loc="(910,90)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="vout"/>
     </comp>
   </circuit>
   <circuit name="BPC">
@@ -174,9 +174,19 @@
       <circ-port height="10" pin="910,340" width="10" x="85" y="65"/>
       <circ-anchor facing="east" height="6" width="6" x="47" y="57"/>
     </appear>
-    <comp lib="0" loc="(80,540)" name="Pin">
+    <comp lib="0" loc="(80,110)" name="Pin">
       <a name="tristate" val="false"/>
-      <a name="label" val="reset"/>
+      <a name="label" val="H1"/>
+    </comp>
+    <comp lib="0" loc="(80,430)" name="Pin">
+      <a name="tristate" val="false"/>
+      <a name="label" val="V2"/>
+    </comp>
+    <comp lib="0" loc="(910,270)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="ready"/>
     </comp>
     <comp lib="0" loc="(910,340)" name="Pin">
       <a name="facing" val="west"/>
@@ -185,41 +195,25 @@
       <a name="tristate" val="false"/>
       <a name="label" val="XY"/>
     </comp>
-    <comp lib="0" loc="(80,430)" name="Pin">
-      <a name="width" val="2"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="V2"/>
-    </comp>
-    <comp lib="0" loc="(80,110)" name="Pin">
-      <a name="width" val="2"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="H1"/>
-    </comp>
-    <comp lib="0" loc="(80,360)" name="Pin">
-      <a name="width" val="2"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="V1"/>
-    </comp>
     <comp lib="0" loc="(80,40)" name="Pin">
-      <a name="width" val="2"/>
       <a name="tristate" val="false"/>
       <a name="label" val="H0"/>
     </comp>
-    <comp lib="0" loc="(910,270)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
+    <comp lib="0" loc="(80,360)" name="Pin">
       <a name="tristate" val="false"/>
-      <a name="label" val="ready"/>
-    </comp>
-    <comp lib="0" loc="(80,180)" name="Pin">
-      <a name="width" val="2"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="H2"/>
+      <a name="label" val="V1"/>
     </comp>
     <comp lib="0" loc="(80,290)" name="Pin">
-      <a name="width" val="2"/>
       <a name="tristate" val="false"/>
       <a name="label" val="V0"/>
+    </comp>
+    <comp lib="0" loc="(80,540)" name="Pin">
+      <a name="tristate" val="false"/>
+      <a name="label" val="reset"/>
+    </comp>
+    <comp lib="0" loc="(80,180)" name="Pin">
+      <a name="tristate" val="false"/>
+      <a name="label" val="H2"/>
     </comp>
   </circuit>
   <circuit name="SDR">
@@ -242,47 +236,7 @@
       <circ-port height="10" pin="940,440" width="10" x="75" y="95"/>
       <circ-anchor facing="east" height="6" width="6" x="47" y="57"/>
     </appear>
-    <comp lib="0" loc="(940,440)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
-      <a name="width" val="3"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="V2"/>
-    </comp>
-    <comp lib="0" loc="(940,120)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
-      <a name="width" val="3"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="H1"/>
-    </comp>
-    <comp lib="0" loc="(940,370)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
-      <a name="width" val="3"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="V1"/>
-    </comp>
-    <comp lib="0" loc="(940,440)" name="Splitter">
-      <a name="facing" val="west"/>
-      <a name="incoming" val="3"/>
-      <a name="bit2" val="none"/>
-    </comp>
-    <comp lib="0" loc="(940,50)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
-      <a name="width" val="3"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="H0"/>
-    </comp>
-    <comp lib="0" loc="(940,300)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
-      <a name="width" val="3"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="V0"/>
-    </comp>
-    <comp lib="0" loc="(940,370)" name="Splitter">
+    <comp lib="0" loc="(940,50)" name="Splitter">
       <a name="facing" val="west"/>
       <a name="incoming" val="3"/>
       <a name="bit2" val="none"/>
@@ -292,14 +246,40 @@
       <a name="tristate" val="false"/>
       <a name="label" val="XY"/>
     </comp>
-    <comp lib="0" loc="(940,120)" name="Splitter">
+    <comp lib="0" loc="(940,300)" name="Pin">
       <a name="facing" val="west"/>
-      <a name="incoming" val="3"/>
-      <a name="bit2" val="none"/>
+      <a name="output" val="true"/>
+      <a name="width" val="3"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="V0"/>
+    </comp>
+    <comp lib="0" loc="(940,190)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="width" val="3"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="H2"/>
+    </comp>
+    <comp lib="0" loc="(940,50)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="width" val="3"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="H0"/>
     </comp>
     <comp lib="0" loc="(70,310)" name="Pin">
       <a name="tristate" val="false"/>
       <a name="label" val="clock"/>
+    </comp>
+    <comp lib="0" loc="(940,300)" name="Splitter">
+      <a name="facing" val="west"/>
+      <a name="incoming" val="3"/>
+      <a name="bit2" val="none"/>
+    </comp>
+    <comp lib="0" loc="(940,440)" name="Splitter">
+      <a name="facing" val="west"/>
+      <a name="incoming" val="3"/>
+      <a name="bit2" val="none"/>
     </comp>
     <comp lib="0" loc="(70,170)" name="Pin">
       <a name="width" val="2"/>
@@ -311,22 +291,36 @@
       <a name="incoming" val="3"/>
       <a name="bit2" val="none"/>
     </comp>
-    <comp lib="0" loc="(940,300)" name="Splitter">
+    <comp lib="0" loc="(940,370)" name="Splitter">
       <a name="facing" val="west"/>
       <a name="incoming" val="3"/>
       <a name="bit2" val="none"/>
     </comp>
-    <comp lib="0" loc="(940,190)" name="Pin">
+    <comp lib="0" loc="(940,120)" name="Splitter">
+      <a name="facing" val="west"/>
+      <a name="incoming" val="3"/>
+      <a name="bit2" val="none"/>
+    </comp>
+    <comp lib="0" loc="(940,440)" name="Pin">
       <a name="facing" val="west"/>
       <a name="output" val="true"/>
       <a name="width" val="3"/>
       <a name="tristate" val="false"/>
-      <a name="label" val="H2"/>
+      <a name="label" val="V2"/>
     </comp>
-    <comp lib="0" loc="(940,50)" name="Splitter">
+    <comp lib="0" loc="(940,370)" name="Pin">
       <a name="facing" val="west"/>
-      <a name="incoming" val="3"/>
-      <a name="bit2" val="none"/>
+      <a name="output" val="true"/>
+      <a name="width" val="3"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="V1"/>
+    </comp>
+    <comp lib="0" loc="(940,120)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="width" val="3"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="H1"/>
     </comp>
   </circuit>
   <circuit name="GSDD">
@@ -345,15 +339,15 @@
       <circ-port height="10" pin="930,290" width="10" x="95" y="35"/>
       <circ-anchor facing="east" height="6" width="6" x="47" y="37"/>
     </appear>
-    <comp lib="0" loc="(140,260)" name="Pin">
-      <a name="tristate" val="false"/>
-      <a name="label" val="clock"/>
-    </comp>
-    <comp lib="0" loc="(930,290)" name="Pin">
+    <comp lib="0" loc="(930,220)" name="Pin">
       <a name="facing" val="west"/>
       <a name="output" val="true"/>
       <a name="tristate" val="false"/>
-      <a name="label" val="draw"/>
+      <a name="label" val="lose"/>
+    </comp>
+    <comp lib="0" loc="(140,260)" name="Pin">
+      <a name="tristate" val="false"/>
+      <a name="label" val="clock"/>
     </comp>
     <comp lib="0" loc="(930,150)" name="Pin">
       <a name="facing" val="west"/>
@@ -361,16 +355,16 @@
       <a name="tristate" val="false"/>
       <a name="label" val="win"/>
     </comp>
+    <comp lib="0" loc="(930,290)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="draw"/>
+    </comp>
     <comp lib="0" loc="(140,180)" name="Pin">
       <a name="width" val="2"/>
       <a name="tristate" val="false"/>
       <a name="label" val="score"/>
-    </comp>
-    <comp lib="0" loc="(930,220)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="lose"/>
     </comp>
   </circuit>
 </project>
