@@ -1,54 +1,25 @@
-asect 0
+asect 0x00
+
+ldi r3, io_addr
+
+readloop:
+ld r3, r0
+ldi r1, 0x80
+add r0, r1
+bls readloop
+
+shla r0
+shla r0
+ldi r1, 3
+add r1, r0
+st r3, r0
+br readloop
 
 
-ldi r3, 0
-ldi r1, 0xf3
 
-loop11:
-ldi r2, 0
-	loop12:
-	ldi r0, 0
-	add r3, r0
-	shla r0
-	shla r0
-	add r2, r0
-	shla r0
-	shla r0
-	inc r0
-	inc r0
-	st r1, r0
-	inc r2
-	ldi r0, 2
-	sub r2, r0
-	ble loop12
-inc r3
-ldi r0, 2
-sub r3, r0
-ble loop11
-
-ldi r3, 0
-ldi r1, 0xf3
-
-loop21:
-ldi r2, 0
-	loop22:
-	ldi r0, 0
-	add r3, r0
-	shla r0
-	shla r0
-	add r2, r0
-	shla r0
-	shla r0	
-	st r1, r0
-	inc r2
-	ldi r0, 2
-	sub r2, r0
-	ble loop22
-inc r3
-ldi r0, 2
-sub r3, r0
-ble loop21
-
-halt
-
+asect 0xf3
+io_addr:
+	dc 0b10000101
+	
 end
+
