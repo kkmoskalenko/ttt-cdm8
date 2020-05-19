@@ -57,7 +57,12 @@ gamestat: #probably overrites every reg
 		dec r0
 	is eq
 	then
-		clr r0
+		jsr checkDraw
+		if 
+			tst r1
+		is z
+			ldi r0, 0b11000000
+		fi
 		pop r3
 		rts
 	fi	
@@ -89,10 +94,37 @@ gamestat: #probably overrites every reg
 	cmp r1, r2
 	bnz gsloop
 	
-	ldi r0, 0b01000000
+	if 
+		dec r1
+	is z
+		ldi r0, 0b01000000
+	else
+		ldi r0, 0b10000000
+	fi		
 	pop r3
 	rts
+
+checkDraw:
+	ldi r1, table
+	ldi r2, 10
+	cdloop:
+	if
+		dec r2
+	is eq
+		ldi r1, 0
+		rts
+	fi
+	ldc r1, r0
+	ld r0, r0
+	inc r1
+	if
+		tst r0
+	is z
+		rts
+	fi
+	br cdloop
 	
+
 
 table: 
 	dc 0,1,2 #h
