@@ -7,10 +7,10 @@ ldi r3, 0xf3
 readloop:
 ld r3, r1 #get the cell address
  
-ldi r0, 0x80
-add r0, r1	#if ready is 0: loop
+shla r1	#if ready is 0: loop
 bcc readloop
 
+shra r1
 ld r1, r0
 tst r0
 bnz readloop
@@ -19,20 +19,17 @@ jsr sendStuff
 
 dec r2 #change symbol
 
-inc r3 #r3 := 0xf4 (rng io)
+AIturn0:
+ldi r3, 0xf4 #(rng io addr)
 
 AIturn:
+
 st r3, r2
-ldi r0, 0b00001111
 ld r3, r1
-and r0, r1
 ldi r0, 8
 
 	cmp r0, r1
 bls AIturn
-
-
-push r3
 
 ldi r3, table #check if cell is free
 add r1, r3
@@ -41,34 +38,34 @@ push r1
 ld r1, r1
 
 
-
 tst r1
 pop r1	
-pop r3
-bnz AIturn
+bnz AIturn0
 
+
+ldi r3, 0xf3 #(ttt io addr)
 
 jsr sendStuff
 
 inc r2 #change symbol
-dec r3 #r3 := 0xf3 (ttt io)
 
 br readloop
 #
 
 gamestat: #overrites every reg
 		  #output in r0
+	push r2
 	ldi r3, table
 	ldi r0, 9
 	gsloop:
 	if 
 		dec r0
-	is eq
+	is z
 	then
-		jsr checkDraw
+		pop r1
 		if 
 			tst r1
-		is z
+		is nz
 			ldi r0, 0b11000000
 		fi
 		rts
@@ -80,27 +77,38 @@ gamestat: #overrites every reg
 	ldc r3, r2
 	ld r2, r2
 	inc r3	
+	push r0
+	ldc r3, r0
+	ld r0, r0
+	inc r3
 	if
-		cmp r1, r2
-	is ne, or
 		tst r1
 	is z, or
 		tst r2
+	is z, or
+		tst r0
 	is z
 	then
-		inc r3
+		pop r0
+		pop r2
+		clr r2
+		push r2
 		br gsloop
 	fi
 	
-	ldc r3, r1
-	ld r1, r1
-	inc r3
-	tst r1
-	bz gsloop
+	if
+		cmp r1, r2
+	is ne, or
+		cmp r0, r2
+	is ne
+	then
+		pop r0
+		br gsloop
+	fi
 	
-	cmp r1, r2
-	bnz gsloop
+	pop r0
 	
+	#choosing the winner
 	if 
 		dec r1
 	is z
@@ -108,30 +116,10 @@ gamestat: #overrites every reg
 	else
 		ldi r0, 0b10000000
 	fi	
+	pop r1
 	
 	rts
 #
-
-checkDraw:
-	ldi r1, table
-	ldi r2, 10
-	cdloop:
-	if
-		dec r2
-	is eq
-		ldi r1, 0
-		rts
-	fi
-	ldc r1, r0
-	ld r0, r0
-	inc r1
-	if
-		tst r0
-	is z
-		rts
-	fi
-	br cdloop
-#	
 	
 sendStuff:
 	st r1, r2 #store the symbol
@@ -149,16 +137,13 @@ sendStuff:
 	#r0 has the gamestate bits
 	shla r1
 	shla r1
-	add r0, r1
+	add r0, r1 #put package into r1
 	add r2, r1
 	
-	push r2
-	ldi r2, 0xf3 #send the package
-	st r2, r1
-	pop r2
+	st r3, r1 #send the package
 	
 	if
-		tst r0 #if game ends, stop
+		tst r0 #if game ended, stop
 	is nz
 		halt
 	fi
