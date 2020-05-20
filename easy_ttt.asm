@@ -1,0 +1,181 @@
+asect 0
+
+addsp -16
+
+ldi r2, 2
+ldi r3, 0xf3
+readloop:
+ld r3, r1 #get the cell address
+ 
+ldi r0, 0x80
+add r0, r1	#if ready is 0: loop
+bcc readloop
+
+ld r1, r0
+tst r0
+bnz readloop
+
+jsr sendStuff
+
+dec r2 #change symbol
+
+inc r3 #r3 := 0xf4 (rng io)
+
+AIturn:
+st r3, r2
+ldi r0, 0b00001111
+ld r3, r1
+and r0, r1
+ldi r0, 8
+
+	cmp r0, r1
+bls AIturn
+
+
+push r3
+
+ldi r3, table #check if cell is free
+add r1, r3
+ldc r3, r1
+push r1
+ld r1, r1
+
+
+
+tst r1
+pop r1	
+pop r3
+bnz AIturn
+
+
+jsr sendStuff
+
+inc r2 #change symbol
+dec r3 #r3 := 0xf3 (ttt io)
+
+br readloop
+#
+
+gamestat: #overrites every reg
+		  #output in r0
+	ldi r3, table
+	ldi r0, 9
+	gsloop:
+	if 
+		dec r0
+	is eq
+	then
+		jsr checkDraw
+		if 
+			tst r1
+		is z
+			ldi r0, 0b11000000
+		fi
+		rts
+	fi	
+		
+	ldc r3, r1
+	ld r1, r1
+	inc r3
+	ldc r3, r2
+	ld r2, r2
+	inc r3	
+	if
+		cmp r1, r2
+	is ne, or
+		tst r1
+	is z, or
+		tst r2
+	is z
+	then
+		inc r3
+		br gsloop
+	fi
+	
+	ldc r3, r1
+	ld r1, r1
+	inc r3
+	tst r1
+	bz gsloop
+	
+	cmp r1, r2
+	bnz gsloop
+	
+	if 
+		dec r1
+	is z
+		ldi r0, 0b01000000
+	else
+		ldi r0, 0b10000000
+	fi	
+	
+	rts
+#
+
+checkDraw:
+	ldi r1, table
+	ldi r2, 10
+	cdloop:
+	if
+		dec r2
+	is eq
+		ldi r1, 0
+		rts
+	fi
+	ldc r1, r0
+	ld r0, r0
+	inc r1
+	if
+		tst r0
+	is z
+		rts
+	fi
+	br cdloop
+#	
+	
+sendStuff:
+	st r1, r2 #store the symbol
+	
+	save r1
+	save r2
+	save r3
+	jsr gamestat #checks for the game's end
+	restore 
+	restore
+	restore
+	
+	#r1 has the cell addr bits
+	#r2 has the symbol bits
+	#r0 has the gamestate bits
+	shla r1
+	shla r1
+	add r0, r1
+	add r2, r1
+	
+	push r2
+	ldi r2, 0xf3 #send the package
+	st r2, r1
+	pop r2
+	
+	if
+		tst r0 #if game ends, stop
+	is nz
+		halt
+	fi
+
+	rts
+#
+
+table: 
+	dc 0,1,2 #h
+	dc 4,5,6
+	dc 8,9,10
+	
+	dc 0,4,8 #v
+	dc 1,5,9
+	dc 2,6,10
+	
+	dc 0,5,10 #d
+	dc 8,5,2
+
+end
