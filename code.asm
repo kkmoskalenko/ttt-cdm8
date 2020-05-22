@@ -29,8 +29,14 @@ jsr chooseLine
 tst r0 
 bnz lineHack
 
+inc r2
+ldi r1, 3
+ldi r3, table + 18
+jsr clRepeat
+tst r0
+bnz cursedStrat
+
 #if no attack/defence needed, try the middle
-ldi r2, 1
 ldi r1, 5
 ld r1, r0
 #if middle is not occupied, place there
@@ -50,6 +56,7 @@ jsr AItableThing
 jsr AItableThing #bottom-right corner
 
 #otherwise place to the first possible
+cursedStrat:
 ldi r3, table - 1
 jsr AItableThing
 jsr AItableThing
@@ -59,7 +66,6 @@ jsr AItableThing
 		
 #if atk/def, find where to place in the line
 lineHack:
-ldi r2, 1 #nought code
 ldi r1, 4 #iter
 while
 	dec r1
@@ -77,6 +83,7 @@ stays nz
 wend
 
 sendAI:
+ldi r2, 1
 ldi r3, 0xf3 #(ttt io addr)
 
 jsr sendStuff
@@ -191,9 +198,9 @@ chooseLine: #dirty discipline
 			#places the "answer" to r0
 			#if r0 != 0, r3 will have the line
 			#where to place the symbol
-	clRepeat:
 	ldi r3, table
 	ldi r1, 9
+	clRepeat:
 	while 
 		dec r1
 	stays nz
@@ -220,7 +227,7 @@ chooseLine: #dirty discipline
 	rts	
 
 AItableThing:
-	inc r3 #bottom-right corner
+	inc r3 
 	inc r3
 	ldc r3, r1
 	ld r1, r0
