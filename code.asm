@@ -1,130 +1,244 @@
 asect 0
-cells:
-#dc 0, 0, 0, 0
-#dc 0, 0, 0, 0
-#dc 0, 0, 0, 0
-#dc 0, 0, 0, 0
 
 addsp -16
 
-ldi r2, 1
-readloop:
+ldi r2, 2 
 ldi r3, 0xf3
+readloop:
 ld r3, r1 #get the cell address
  
-ldi r3, 0x80
-add r3, r1	#if carry is clear: loop
+shla r1	#if ready is 0: loop
 bcc readloop
 
-ld r1, r3
-tst r3
+shra r1
+ld r1, r0 #test the cell for emptiness
+tst r0
 bnz readloop
-st r1, r2 #store the symbol
 
-ldi r3, 3
-xor r3, r2 #swap symbol
+jsr sendStuff
 
-save r1
-save r2
-jsr gamestat
-restore
-restore
+AIturn:
 
-shla r1
-shla r1
-add r0, r1 #r1 has the cell addr bits
-add r2, r1 #r2 has the symbol bits
-	#r0 has the gamestate bits
+ldi r2, 0xf5
+jsr chooseLine 
+tst r0
+bnz lineHack
 
-ldi r3, 0xf3 #ttt io addr
-st r3, r1
+inc r2
+jsr chooseLine
+tst r0 
+bnz lineHack
 
-if
-	tst r0
-is nz
-	halt
-fi
+#if no attack/defence needed, try the middle
+ldi r2, 1
+ldi r1, 5
+ld r1, r0
+#if middle is not occupied, place there
+tst r0
+bz sendAI
+
+#if mdl is occupied, try the corners
+ldi r3, table - 2 #top-left corner
+jsr AItableThing
+
+jsr AItableThing #top-right corner
+
+inc r3 #bottom-left corner
+inc r3	
+jsr AItableThing
+	
+jsr AItableThing #bottom-right corner
+
+#otherwise place to the first possible
+ldi r3, table - 1
+jsr AItableThing
+jsr AItableThing
+jsr AItableThing
+jsr AItableThing	
+	
+		
+#if atk/def, find where to place in the line
+lineHack:
+ldi r2, 1 #nought code
+ldi r1, 4 #iter
+while
+	dec r1
+stays nz
+	ldc r3, r0
+	ld r0, r0
+	if 
+		tst r0
+	is z
+	then
+		ldc r3, r1
+		br sendAI
+	fi
+	inc r3
+wend
+
+sendAI:
+ldi r3, 0xf3 #(ttt io addr)
+
+jsr sendStuff
+
+inc r2 #change symbol
 
 br readloop
+#
 
-gamestat: #probably overrites every reg
-		  #output in r0
-	push r3
-	ldi r3, table
+gamestat: #overrites every reg
+		  #output in r0 (bits 6 and 7)
+	push r2
+	ldi r3, table #init loop
 	ldi r0, 9
 	gsloop:
 	if 
-		dec r0
-	is eq
+		dec r0 #iterate
+	is z
 	then
-		jsr checkDraw
-		if 
-			tst r1
-		is z
+		pop r1 #if the number on top
+		if     #of the stack is 0 
+			tst r1 #then it's a draw
+		is nz
 			ldi r0, 0b11000000
 		fi
-		pop r3
 		rts
 	fi	
 		
-	ldc r3, r1
-	ld r1, r1
+	push r0
+	ldc r3, r0
+	ld r0, r0
 	inc r3
+	
+	ldc r3, r1 #r0, r1, r2 have the symbols
+	ld r1, r1  #of a single line
+	inc r3	
+	
 	ldc r3, r2
 	ld r2, r2
-	inc r3	
+	inc r3
 	if
-		cmp r1, r2
-	is ne, or
+		tst r0
+	is z, or
 		tst r1
 	is z, or
 		tst r2
 	is z
 	then
-		inc r3
+		pop r0 #if any one of them is 0
+		pop r2 #set the flag on stack to 0 and loop
+		clr r2
+		push r2
 		br gsloop
 	fi
 	
-	ldc r3, r1
-	ld r1, r1
-	inc r3
-	tst r1
-	bz gsloop
+	if
+		cmp r1, r2
+	is ne, or
+		cmp r0, r2
+	is ne
+	then
+		pop r0 #if any pair is ne - loop
+		br gsloop
+	fi
 	
-	cmp r1, r2
-	bnz gsloop
+	pop r0 #preventing stack overflow
 	
+	#choosing the winner
 	if 
 		dec r1
 	is z
-		ldi r0, 0b01000000
-	else
 		ldi r0, 0b10000000
-	fi		
-	pop r3
-	rts
-
-checkDraw:
-	ldi r1, table
-	ldi r2, 10
-	cdloop:
-	if
-		dec r2
-	is eq
-		ldi r1, 0
-		rts
-	fi
-	ldc r1, r0
-	ld r0, r0
-	inc r1
-	if
-		tst r0
-	is z
-		rts
-	fi
-	br cdloop
+	else
+		ldi r0, 0b01000000
+	fi	
+	pop r1 #preventing stack overflow
 	
+	rts
+#
+	
+sendStuff:
+	st r1, r2 #store the symbol
+	
+	save r1 #save everything bc gamestat
+	save r2 #ovewrites all regs
+	save r3
+	jsr gamestat #checks for the game's end
+	restore 
+	restore
+	restore
+	
+	#r1 has the cell addr bits
+	#r2 has the symbol bits
+	#r0 has the gamestate bits
+	shla r1
+	shla r1
+	add r0, r1 #put package into r1
+	add r2, r1
+	
+	st r3, r1 #send the package
+	
+	if
+		tst r0 #if game ended, stop
+	is nz
+		halt
+	fi
 
+	rts
+#
+
+chooseLine: #dirty discipline
+			#places the "answer" to r0
+			#if r0 != 0, r3 will have the line
+			#where to place the symbol
+	clRepeat:
+	ldi r3, table
+	ldi r1, 9
+	while 
+		dec r1
+	stays nz
+		
+		push r1
+		jsr clThing
+		jsr clThing
+		jsr clThing
+		st r2, r1
+		pop r1
+		
+		
+		ld r2, r0
+		if
+			tst r0
+		is nz
+		then
+			dec r3
+			dec r3
+			dec r3
+			rts 
+		fi
+	wend
+	rts	
+
+AItableThing:
+	inc r3 #bottom-right corner
+	inc r3
+	ldc r3, r1
+	ld r1, r0
+	tst r0
+	pop r0
+	bz sendAI
+	push r0
+	rts
+	
+clThing:
+	ldc r3, r0
+	ld r0, r0
+	shla r1
+	shla r1
+	or r0, r1
+	inc r3
+	rts
+	
 
 table: 
 	dc 0,1,2 #h
@@ -138,7 +252,4 @@ table:
 	dc 0,5,10 #d
 	dc 8,5,2
 
-asect 0xf3
-iostuff:
-#dc 0b10000101
 end
