@@ -100,15 +100,13 @@ sendStuff:
 	push r2 
 	push r3
 	
-	ldi r3, 16
+	ldi r3, 16 #at addr 0x10 is a count of turns
 	ld r3, r1
 	inc r1
 	st r3, r1
 	clr r0
-	push r0
-	ldi r0, 4
-	cmp r1, r0
-	pop r0
+	ldi r3, 4
+	cmp r1, r3
 	ble clSkipEndCheck
 	
 	ldi r2, 0xf8
@@ -120,11 +118,9 @@ sendStuff:
 		
 		ldi r3, 16
 		ld r3, r1
-		push r0
-		ldi r0, 9
-		cmp r1, r0
-		pop r0
-		bls clSkipEndCheck
+		ldi r3, 9
+		cmp r3, r1
+		bgt clSkipEndCheck
 		
 		ldi r0, 0b11000000
 	fi
