@@ -19,6 +19,28 @@ jsr sendStuff
 
 AIturn:
 
+ldi r2, 0xf4
+st r2, r2
+ld r2, r1
+if
+	shra r1
+is cs
+	ldi r3, table
+	RNGloop:
+	ldi r0, 8
+	st r2, r2
+	ld r2, r1	
+	cmp r1, r0
+	bgt RNGloop
+	add r3, r1
+	ldc r1, r1
+	ld r1, r0
+	tst r0
+	bnz RNGloop 
+	br sendAI
+then
+
+fi
 ldi r2, 0xf5
 jsr chooseLine 
 tst r0
@@ -34,7 +56,7 @@ ldi r1, 3
 ldi r3, table + 18
 jsr chooseLine + 4
 tst r0
-bnz cursedStrat
+bnz badStrat
 
 #if no attack/defence needed, try the middle
 ldi r1, 5
@@ -56,7 +78,7 @@ jsr AItableThing
 jsr AItableThing #bottom-right corner
 
 #otherwise place to the first possible
-cursedStrat:
+badStrat:
 ldi r3, table - 1
 jsr AItableThing
 jsr AItableThing
